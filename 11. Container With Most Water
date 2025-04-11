@@ -1,0 +1,25 @@
+class Solution
+{
+public:
+    int maxArea(std::vector<int> &heights)
+    {
+        int area = 0;
+        int left = 0;
+        int right = heights.size() - 1;
+        while (left < right)
+        {
+            int width = right - left;
+            int height = std::min(heights[left], heights[right]);
+            area = std::max(area, width * height);
+            if (heights[left] > heights[right])         // moving smaller right to the left
+            {
+                right--;
+            }
+            else                                       // moving smaller left to the right
+            {
+                left++;
+            }
+        }
+        return area;
+    }
+};
