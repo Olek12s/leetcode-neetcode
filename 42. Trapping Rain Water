@@ -1,0 +1,34 @@
+class Solution
+{
+public:
+    int trap(std::vector<int> &heights)
+    {
+        int n = heights.size();
+
+        std::vector<int> lMax(n, 0);
+        std::vector<int> rMax(n, 0);
+        std::vector<int> trapped(n, 0);
+
+
+        int maxLeft = heights[0];
+        for (int i = 1; i < n; i++)
+        {
+            lMax[i] = std::max(maxLeft, heights[i]);
+            if (maxLeft < heights[i]) maxLeft = heights[i];
+        }
+
+        int maxRight = heights[n-1];
+        for (int i = n-1; i >= 0; i--)
+        {
+            rMax[i] = std::max(maxRight, heights[i]);
+            if (maxRight < heights[i]) maxRight = heights[i];
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            trapped[i] = std::max(0, std::min(lMax[i], rMax[i]) - heights[i]);
+        }
+
+        return std::accumulate(trapped.begin(), trapped.end(), 0);
+    }
+};
