@@ -1,0 +1,28 @@
+class Solution
+{
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs)
+    {
+        map<int, std::vector<string>> map;
+
+        for (string &str : strs)
+        {
+            int key = -1;
+            int count = 0;
+            for (char &c : str)
+            {
+                count++;
+                key += (int)c;
+            }
+            key = key + (count * 1000000);
+            map[key].push_back(str);
+        }
+        
+        std::vector<std::vector<string>> result;
+        for (auto &element : map)
+        {
+            result.push_back(element.second);
+        }
+        return result;
+    }
+};
