@@ -1,0 +1,43 @@
+struct Car
+{
+    int speed;
+    int position;
+
+    Car(int speed, int position)
+    {
+        this->speed = speed;
+        this->position = position;
+    }
+};
+
+class Solution
+{
+public:
+    int carFleet(int target, std::vector<int> &position, std::vector<int> &speed)
+    {
+        int n = position.size();
+        std::vector<Car> cars;
+
+        for (int i = 0; i < n; i++)
+        {
+            cars.push_back(Car(speed[i], position[i]));
+        }
+        std::sort(cars.begin(), cars.end(), [](const Car &a, const Car &b)
+        {
+            return a.position > b.position;     // desceding
+        });
+        std::stack<double> stack;
+
+        for (int i = 0; i < n; i++)
+        {
+            double time = (double)(target - cars[i].position) / cars[i].speed;
+
+            if (!stack.empty() && time <= stack.top())  // merges with other fleet
+            {
+                continue;
+            }
+            stack.push(time);  // new fleet
+        }
+        return stack.size();
+    }
+};
