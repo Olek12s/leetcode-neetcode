@@ -1,0 +1,22 @@
+class Solution  // O(n) mem sol
+{
+public:
+    int findDuplicate(std::vector<int> &nums)
+    {
+        int n = nums.size();
+        std::vector<bool> seenNums(n, 0);
+
+        for (int n : nums)
+        {
+            if (seenNums[n] == false)
+            {
+                seenNums[n] = true;
+            }
+            else
+            {
+                return n;
+            }
+        }
+        return -1;
+    }
+};
