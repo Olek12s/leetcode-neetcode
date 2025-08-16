@@ -1,0 +1,41 @@
+class Solution {
+public:
+
+    static int findMax(vector<int> &piles) {
+        int max = INT_MIN;
+        for (int el : piles) {
+            if (max < el) {
+                max = el;
+            }
+        }
+        return max;
+    }
+
+    static long long timeToEastBananas(vector<int> &piles, int t) {
+        long long time = 0;
+
+        for (int el : piles) {
+            time += ceil((double)el / t);
+        }
+        return time;
+    }
+
+    static int minEatingSpeed(vector<int>& piles, int h) {
+        int max = findMax(piles);
+        int left = 1;
+        int right = max;
+
+        while (left <= right) {
+            int middle = left + (right - left) / 2;
+
+            if (timeToEastBananas(piles, middle) <= h) {    // we are eating fast, we can slow down
+                right = middle - 1;
+            }
+            else if (timeToEastBananas(piles, middle) > h) {    // we are eating too slow, we have to speed up
+                left = middle + 1;
+            }
+            //else return middle;
+        }
+        return left;
+    }
+};
