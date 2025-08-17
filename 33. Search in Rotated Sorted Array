@@ -1,0 +1,47 @@
+class Solution {
+public:
+
+    static int search(vector<int>& nums, int target) {
+        int rotationIdx = findRotationIdx(nums);
+        int n = nums.size() - 1;
+
+        if (nums[rotationIdx] == target) return rotationIdx;
+
+        int left, right;
+        if (rotationIdx == 0) { // not rotated
+            left = 0;
+            right = n;
+        }
+        else if (target >= nums[rotationIdx] && target <= nums[n]) { // target is on the right side
+            left = rotationIdx;
+            right = n;
+        }
+        else {  // target is on the left side
+            left = 0;
+            right = rotationIdx - 1;
+        }
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) return mid;
+            else if (nums[mid] < target) left = mid + 1;    // target is on the right side
+            else right = mid - 1;   // target is on the left side
+        }
+        return -1;
+    }
+
+    static int findRotationIdx(vector<int>& nums) {
+        int left = 0;
+        int right = nums.size() - 1;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] > nums[right]) {  // rotation is on the right side
+                left = mid + 1;
+            }
+            else right = mid;       // rotation is on the left side
+        }
+        return left;
+    }
+};
