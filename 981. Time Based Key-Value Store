@@ -1,0 +1,40 @@
+class TimeMap {
+    unordered_map<string, vector<pair<int, string>>> hm;
+public:
+    TimeMap() {
+
+    }
+
+    void set(string key, string value, int timestamp) {
+        hm[key].push_back({timestamp, value});
+    }
+
+    string get(string key, int timestamp) {
+        if (!hm.contains(key)) return "";
+
+        vector<pair<int, string>> &element = hm[key];    // sorted ascending
+
+        int left = 0;
+        int right = element.size() - 1;
+        string res = "";
+
+        while (left <= right) {
+            int middle = left + (right - left) / 2;
+            if (element[middle].first <= timestamp) {
+                res = element[middle].second;
+                left = middle + 1;
+            }
+            else {
+                right = middle - 1;
+            }
+        }
+        return res;
+    }
+};
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap* obj = new TimeMap();
+ * obj->set(key,value,timestamp);
+ * string param_2 = obj->get(key,timestamp);
+ */
