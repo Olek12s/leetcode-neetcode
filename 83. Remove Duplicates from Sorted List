@@ -7,7 +7,9 @@ public:
 
         while (head->next != nullptr) {
             if (head->val == head->next->val) {
+                ListNode *tmp = head->next;
                 head->next = head->next->next;
+                delete tmp;
             }
             else {
                 head = head->next;
