@@ -1,0 +1,106 @@
+class Solution {
+public:
+    static int minimumArea(vector<vector<int>> &grid) {
+        int x = grid.size();    // i
+        int y = grid[0].size(); // j
+
+        int minI = x;
+        int maxI = 0;
+        int minJ = y;
+        int maxJ = 0;
+
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                if (grid[i][j] == 1) {
+                    minI = min(minI, i);
+                    maxI = max(maxI, i);
+                    minJ = min(minJ, j);
+                    maxJ = max(maxJ, j);
+                }
+            }
+        }
+        return (maxI - minI + 1) * (maxJ - minJ + 1);
+    }
+};
+
+
+// trimming method:
+
+
+class Solution {
+public:
+
+    static void trimTop(vector<vector<int>> &grid, int &top, const int bottom, int const left, int const right) {
+        while (top <= bottom) {
+            bool hasOne = false;
+            for (int j = left; j <= right; j++) {
+                if (grid[top][j] == 1) {
+                    hasOne = true;
+                    break;
+                }
+            }
+            if (hasOne) break;
+            top++;
+        }
+    }
+
+    static void trimBottom(vector<vector<int>> &grid, int &bottom, const int top, int const left, int const right) {
+        while (bottom >= top) {
+            bool hasOne = false;
+            for (int j = left; j <= right; j++) {
+                if (grid[bottom][j] == 1) {
+                    hasOne = true;
+                    break;
+                }
+            }
+            if (hasOne) break;
+            bottom--;
+        }
+    }
+
+    static void trimLeft(vector<vector<int>> &grid, int &left, const int right, const int top, const int bottom) {
+        while (left <= right) {
+            bool hasOne = false;
+            for (int i = top; i <= bottom; i++) {
+                if (grid[i][left] == 1) {
+                    hasOne = true;
+                    break;
+                }
+            }
+            if (hasOne) break;
+            left++;
+        }
+    }
+
+    static void trimRight(vector<vector<int>> &grid, int &right, const int left, const int top, const int bottom) {
+        while (right >= left) {
+            bool hasOne = false;
+            for (int i = top; i <= bottom; i++) {
+                if (grid[i][right] == 1) {
+                    hasOne = true;
+                    break;
+                }
+            }
+            if (hasOne) break;
+            right--;
+        }
+    }
+
+    static int minimumArea(vector<vector<int>> &grid) {
+        int x = grid.size();    // i
+        int y = grid[0].size(); // j
+
+        int top = 0;
+        int left = 0;
+        int bottom = x - 1;
+        int right = y - 1;
+
+        trimRight(grid, right, left, top, bottom);
+        trimTop(grid, top, bottom, left, right);
+        trimBottom(grid, bottom, top, left, right);
+        trimLeft(grid, left, right, top, bottom);
+
+        if (top > bottom || left > right) return 0;
+        return (bottom - top + 1) * (right - left + 1);
+    }
+};
