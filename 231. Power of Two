@@ -6,3 +6,26 @@ public:
         else return true;
     }
 };
+
+
+
+// bit mask solution
+
+
+class Solution {
+public:
+    static bool isPowerOfTwo(int n) {
+        if (n <= 0) return false; 
+
+        unsigned int mask = 1; 
+        while (mask != 0) {    
+            if (n & mask) { 
+                n ^= mask;   
+                if (n == 0) return true;  
+                else return false;       
+            }
+            mask <<= 1; 
+        }
+        return false;
+    }
+};
