@@ -1,0 +1,184 @@
+
+class Solution {
+public:
+
+    int areaOfOnes(vector<vector<int>> &grid, int u, int d, int l, int r) {
+        int top = u, bottom = d, left = l, right = r;
+
+        // trim left
+        while (left <= right) {
+            bool hasOne = false;
+            for (int i = top; i <= bottom; i++) {
+                if (grid[i][left] == 1) { hasOne = true; break; }
+            }
+            if (hasOne) break;
+            left++;
+        }
+
+        // trim right
+        while (right >= left) {
+            bool hasOne = false;
+            for (int i = top; i <= bottom; i++) {
+                if (grid[i][right] == 1) { hasOne = true; break; }
+            }
+            if (hasOne) break;
+            right--;
+        }
+
+        // trim top
+        while (top <= bottom) {
+            bool hasOne = false;
+            for (int j = left; j <= right; j++) {
+                if (grid[top][j] == 1) { hasOne = true; break; }
+            }
+            if (hasOne) break;
+            top++;
+        }
+
+        // trim bottom
+        while (bottom >= top) {
+            bool hasOne = false;
+            for (int j = left; j <= right; j++) {
+                if (grid[bottom][j] == 1) { hasOne = true; break; }
+            }
+            if (hasOne) break;
+            bottom--;
+        }
+
+        if (top > bottom || left > right) return INT_MAX / 3;
+        return (bottom - top + 1) * (right - left + 1);
+    }
+
+    /*
+     *  ----
+     *  ----
+     *  ----
+     *  ----
+     */
+    int splitHorizontal(vector<vector<int>> &grid) {
+        int n = grid.size(), m = grid[0].size();
+        int best = INT_MAX / 2;
+        for (int i = 0; i + 2 < n; i++) {
+            for (int j = i + 1; j + 1 < n; j++) {
+                int top    = areaOfOnes(grid, 0, i, 0, m - 1);
+                int mid    = areaOfOnes(grid, i+1, j, 0, m - 1);
+                int bottom = areaOfOnes(grid, j+1, n-1, 0, m - 1);
+                best = min(best, top + mid + bottom);
+            }
+        }
+        return best;
+    }
+
+    /*
+     *  | | | |
+     *  | | | |
+     *  | | | |
+     *  | | | |
+     */
+    int splitVertical(vector<vector<int>> &grid) {
+        int n = grid.size(), m = grid[0].size();
+        int best = INT_MAX / 2;
+        for (int i = 0; i + 2 < m; i++) {
+            for (int j = i + 1; j + 1 < m; j++) {
+                int left   = areaOfOnes(grid, 0, n-1, 0,   i);
+                int mid    = areaOfOnes(grid, 0, n-1, i+1, j);
+                int right  = areaOfOnes(grid, 0, n-1, j+1, m-1);
+                best = min(best, left + mid + right);
+            }
+        }
+        return best;
+    }
+
+    /*
+     *  - - - -
+     *  @ @ # #
+     *  @ @ # #
+     */
+    int splitL_TopAndBottomLeftRight(vector<vector<int>> &grid) {
+        int n = grid.size(), m = grid[0].size();
+        int best = INT_MAX / 2;
+        for (int i = 0; i + 1 < n; i++) {
+            for (int j = 0; j + 1 < m; j++) {
+                int top = areaOfOnes(grid, 0, i, 0, m - 1);
+                int bottomLeft = areaOfOnes(grid, i+1, n-1, 0, j);
+                int bottomRight = areaOfOnes(grid, i+1, n-1, j+1, m-1);
+
+                best = min(best, top + bottomLeft + bottomRight);
+            }
+        }
+        return best;
+    }
+
+    /*
+     *  @ @ # #
+     *  @ @ # #
+     *  - - - -
+     */
+    int splitL_TopLeftRightAndBottom(vector<vector<int>> &grid) {
+        int n = grid.size(), m = grid[0].size();
+        int best = INT_MAX / 2;
+        for (int i = 0; i + 1 < n; i++) {
+            for (int j = 0; j + 1 < m; j++) {
+                int topLeft = areaOfOnes(grid, 0, i, 0, j);
+                int topRight = areaOfOnes(grid, 0, i, j+1, m-1);
+                int bottom = areaOfOnes(grid, i+1, n-1, 0, m-1);
+
+                best = min(best, topLeft + topRight + bottom);
+            }
+        }
+        return best;
+    }
+
+    /*
+     *  | | # #
+     *  | | # #
+     *  | | @ @
+     *  | | @ @
+     */
+    int splitL_LeftAndTopBottomRight(vector<vector<int>> &grid) {
+        int n = grid.size(), m = grid[0].size();
+        int best = INT_MAX / 2;
+        for (int i = 0; i + 1 < m; i++) {
+            for (int j = 0; j + 1 < n; j++) {
+                int left = areaOfOnes(grid, 0, n-1, 0, i);
+                int topRight = areaOfOnes(grid, 0, j, i+1, m-1);
+                int bottomRight = areaOfOnes(grid, j+1, n-1, i+1, m-1);
+
+                best = min(best, left + topRight + bottomRight);
+            }
+        }
+        return best;
+    }
+
+    /*
+     *  # # | |
+     *  # # | |
+     *  @ @ | |
+     *  @ @ | |
+     */
+    int splitL_TopRightBottomLeftAndRight(vector<vector<int>> &grid) {
+        int n = grid.size(), m = grid[0].size();
+        int best = INT_MAX / 2;
+        for (int i = 0; i + 1 < m; i++) {
+            for (int j = 0; j + 1 < n; j++) {
+                int right = areaOfOnes(grid, 0, n-1, i+1, m-1);
+                int topLeft = areaOfOnes(grid, 0, j, 0, i);
+                int bottomLeft = areaOfOnes(grid, j+1, n-1, 0, i);
+
+                best = min(best, right + topLeft + bottomLeft);
+            }
+        }
+        return best;
+    }
+
+    int minimumSum(vector<vector<int>> &grid) {
+        int ans = INT_MAX/2;
+        ans = min(ans, splitHorizontal(grid));
+        ans = min(ans, splitVertical(grid));
+        ans = min(ans, splitL_TopAndBottomLeftRight(grid));
+        ans = min(ans, splitL_TopLeftRightAndBottom(grid));
+        ans = min(ans, splitL_LeftAndTopBottomRight(grid));
+        ans = min(ans, splitL_TopRightBottomLeftAndRight(grid));
+        return ans;
+    }
+};
