@@ -1,0 +1,111 @@
+#include <iostream>
+#include <memory>
+#include <vector>
+#include <cmath>
+#include <map>
+#include <unordered_map>
+#include <algorithm>
+using namespace std;
+
+#include <iostream>
+#include <vector>
+#include <climits>
+#include <algorithm>
+using namespace std;
+
+
+// constructing array of series and checking the neighbors method
+class Solution {
+public:
+
+    static vector<int> findSeries(vector<int> &nums) {
+        vector<int> series;
+
+        int oneSerieLength = 0;
+        int zeroSerieLength = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] == 1) {
+                oneSerieLength++;
+                if (zeroSerieLength < 0) {
+                    series.push_back(zeroSerieLength);
+                    zeroSerieLength = 0;
+                }
+            }
+            if (nums[i] == 0) {
+                zeroSerieLength--;
+                if (oneSerieLength > 0) {  // add to the series Vector
+                    series.push_back(oneSerieLength);
+                    oneSerieLength = 0;
+                }
+            }
+        }
+        if (oneSerieLength > 0) series.push_back(oneSerieLength);
+        if (zeroSerieLength < 0) series.push_back(zeroSerieLength);
+
+        /*
+        // debug //
+        std::cout << "series: {";
+        for (int serie : series) {
+            std::cout << serie << ", ";
+        }
+        std::cout << "}\n";
+        // debug //
+        */
+
+        return series;
+    }
+
+    static int longestSubarray(vector<int>& nums) {
+        vector<int> series = findSeries(nums);
+
+        // only ones case
+        if (series.size() == 1 && series[0] > 0) {
+            return series[0] - 1;
+        }
+
+
+        int longestSubarray = 0;
+        for (int i = 0; i < series.size(); i++) {
+            if (series[i] > 0) {
+                longestSubarray = max(longestSubarray, series[i]);
+            }
+            else if (series[i] == -1) { // merge neighbors
+                if (i > 0 && i + 1 < series.size()) {
+                    longestSubarray = max(longestSubarray, series[i-1] + series[i+1]);
+                }
+            }
+        }
+
+        return longestSubarray;
+    }
+};
+
+
+
+int main() {
+
+    vector<int> nums1 = {1,1,0,1};                                    // series: {2, 1}             // longest: 3   // {2, -1, 1}
+    vector<int> nums2 = {0,1,1,1,0,1,1,0,1};                          // series: {3, 2, 1}           // longest: 5   // {-1, 3, -1, 2, -1, 1}
+    vector<int> nums3 = {1,1,1,0,0,1,1,1};                            // series: {3, 3}              // longest: 3   // {3, -2, 3}
+    vector<int> nums4 = {1,1,1,0,1,1,1};                              // series: {3, 3}               // longest: 6   // {3, -1, 3}
+    vector<int> nums5 = {1,1,1,0,0,1,1,1,1};                          // series: {3, 4}               // longest: 4   // {3, -2, 4}
+    vector<int> nums6 = {1,1,1,0,0,1,1,1,0,1,1,1,1,1};                // series: {3, 3, 5}            // longest: 8   // {3, -2, 3, -1, 5}
+    vector<int> nums7 = {1,1,1,0,0,1,1,1,0,1,1,1,1,1,0,1,0,1,0,1};    // series: {3, 3, 5, 1, 1, 1}   // longest: 8   // {3, -2, 3, -1, 5, -1, 1, -1, 1, -1, 1}
+    vector<int> nums8 = {1};
+    vector<int> nums9 = {};
+    vector<int> nums10 = {1,0,0,0,0};   // 1
+
+    std::cout << Solution::longestSubarray(nums1) << "\n";  // 3
+    std::cout << Solution::longestSubarray(nums2) << "\n";  // 5
+    std::cout << Solution::longestSubarray(nums3) << "\n";  // 3
+    std::cout << Solution::longestSubarray(nums4) << "\n";  // 6
+    std::cout << Solution::longestSubarray(nums5) << "\n";  // 4
+    std::cout << Solution::longestSubarray(nums6) << "\n";  // 8
+    std::cout << Solution::longestSubarray(nums7) << "\n";  // 8
+    std::cout << Solution::longestSubarray(nums8) << "\n";  // 0
+    std::cout << Solution::longestSubarray(nums9) << "\n";  // ?
+    std::cout << Solution::longestSubarray(nums10) << "\n";  // ?
+
+
+    return 0;
+}
