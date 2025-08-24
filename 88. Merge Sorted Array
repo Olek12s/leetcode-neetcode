@@ -1,0 +1,26 @@
+class Solution {    // optimal
+public:
+    static void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int ptrN = n-1;
+        int ptrM = m-1;
+        int ptrC = m+n-1;
+
+        while (ptrM >= 0 && ptrN >= 0) {
+            if (nums2[ptrN] > nums1[ptrM]) {  // inserting from nums2 to nums1
+                nums1[ptrC] = nums2[ptrN];
+                ptrN--;
+                ptrC--;
+            }
+            else {  // inserting from nums1 to nums1
+                nums1[ptrC] = nums1[ptrM];
+                //nums1[ptrM] = nums2[ptrN];
+                ptrM--;
+                ptrC--;
+            }
+        }
+
+        while (ptrN >= 0) { // paste rest
+            nums1[ptrC--] = nums2[ptrN--];
+        }
+    }
+};
