@@ -1,0 +1,23 @@
+class Solution {
+public:
+    static int areaOfMaxDiagonal(vector<vector<int>>& dimensions) {
+        float longestDiagonal = -1;
+        int maximumArea = -1;
+
+        for (int i = 0; i < dimensions.size(); i++) {
+            int a = dimensions[i][0];
+            int b = dimensions[i][1];
+            int area = a * b;
+            float diagonal = sqrtf((a * a) + (b*b));
+
+            if (diagonal > longestDiagonal) {
+                longestDiagonal = diagonal;
+                maximumArea = area;
+            }
+            else if (diagonal == longestDiagonal) {
+                maximumArea = max(maximumArea, area);
+            }
+        }
+        return maximumArea;
+    }
+};
