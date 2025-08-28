@@ -1,0 +1,40 @@
+class Solution {
+public:
+    vector<vector<int>> sortMatrix(vector<vector<int>>& grid) {
+        int n = grid.size();
+
+        for (int startRow = 0; startRow < n; startRow++) {
+            vector<int> diag;
+            int r = startRow, c = 0;
+            while (r < n && c < n) {
+                diag.push_back(grid[r][c]);
+                r++; c++;
+            }
+            sort(diag.rbegin(), diag.rend());
+
+            r = startRow, c = 0;
+            for (int x : diag) {
+                grid[r][c] = x;
+                r++; c++;
+            }
+        }
+
+        for (int startCol = 1; startCol < n; startCol++) {
+            vector<int> diag;
+            int r = 0, c = startCol;
+            while (r < n && c < n) {
+                diag.push_back(grid[r][c]);
+                r++; c++;
+            }
+            sort(diag.begin(), diag.end());
+
+            r = 0, c = startCol;
+            for (int x : diag) {
+                grid[r][c] = x;
+                r++; c++;
+            }
+        }
+
+        return grid;
+    }
+};
