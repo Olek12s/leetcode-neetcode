@@ -1,0 +1,8 @@
+class Solution {
+public:
+static long long flowerGame(int n, int m) {
+
+    long long result = (long long)n * (long long)m;
+    return result / 2;
+}
+};
