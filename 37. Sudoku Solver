@@ -1,0 +1,78 @@
+struct Cell {
+    char value;
+    vector<char> possibilities;
+};
+
+class Solution {
+private:
+    vector<vector<Cell>> boardCells;
+
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        boardCells.resize(9, vector<Cell>(9));
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                boardCells[i][j].value = board[i][j];
+            }
+        }
+
+        solve();
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                board[i][j] = boardCells[i][j].value;
+            }
+        }
+    }
+
+private:
+    bool solve() {
+        int row, col;
+        if (!findBestCell(row, col)) return true;
+
+        for (char num : boardCells[row][col].possibilities) {
+            boardCells[row][col].value = num;
+            if (solve()) return true;
+            boardCells[row][col].value = '.'; // backtracking
+        }
+        return false;
+    }
+    
+    bool findBestCell(int &row, int &col) {
+        int minOptions = 10;
+        row = -1; col = -1;
+
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                if (boardCells[r][c].value == '.') {
+                    vector<char> opts;
+                    for (char num = '1'; num <= '9'; num++) {
+                        if (isValid(r, c, num)) opts.push_back(num);
+                    }
+                    if ((int)opts.size() < minOptions) {
+                        minOptions = opts.size();
+                        row = r; col = c;
+                        boardCells[r][c].possibilities = opts;
+                        if (minOptions == 1) return true;
+                    }
+                }
+            }
+        }
+        return row != -1;
+    }
+
+    bool isValid(int row, int col, char num) {
+        for (int i = 0; i < 9; i++) {
+            if (boardCells[row][i].value == num) return false;
+            if (boardCells[i][col].value == num) return false;
+        }
+        int startRow = (row / 3) * 3;
+        int startCol = (col / 3) * 3;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (boardCells[startRow + i][startCol + j].value == num) return false;
+            }
+        }
+        return true;
+    }
+};
