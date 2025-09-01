@@ -1,0 +1,36 @@
+class Solution {
+public:
+
+    double getClassPassRatio(vector<int> &cls) {
+        return (double)cls[0] / cls[1]; // how many passes // number of students
+    }
+
+    double gain(vector<int> &cls) {
+        int pass = cls[0], total = cls[1];
+        return (double)(pass + 1) / (total + 1) - (double)pass / total;
+    }
+
+    double maxAverageRatio(vector<vector<int>>& classes, int extraStudents) {
+        priority_queue<pair<double,int>> pq;    // gain, index
+
+        for (int i = 0; i < (int)classes.size(); i++) {
+            pq.push({gain(classes[i]), i});
+        }
+
+        while (extraStudents--) {
+            pair<double,int> elem = pq.top();
+            pq.pop();
+            double g = elem.first;
+            int idx = elem.second;
+            classes[idx][0]++; // pass++
+            classes[idx][1]++; // total++
+            pq.push({gain(classes[idx]), idx});
+        }
+        
+        double sum = 0.0;
+        for (auto &cls : classes) {
+            sum += getClassPassRatio(cls);
+        }
+        return sum / classes.size();
+    }
+};
