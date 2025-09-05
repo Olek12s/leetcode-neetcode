@@ -1,0 +1,22 @@
+class Solution {
+public:
+    static int countOnes(long long n) {
+        int ones = 0;
+        while (n > 0) {
+            if (n & 1) ones++;
+            n >>= 1;
+        }
+        return ones;
+    }
+
+    int makeTheIntegerZero(int num1, int num2) {
+        for (int k = 1; k <= 60; k++) {  
+            long long x = (long long)num1 - (long long)k * num2;
+            if (x < k) break;
+            if (countOnes(x) <= k && k <= x) {
+                return k;
+            }
+        }
+        return -1;
+    }
+};
