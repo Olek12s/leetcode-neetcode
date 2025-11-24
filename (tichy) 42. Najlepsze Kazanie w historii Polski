@@ -1,0 +1,19 @@
+#include <iostream>
+long long f(int n) {
+    if (n == 0) return 1;
+    if (n == 1) return 1;
+    long long c = 2;
+    long long p = 1;
+    for (int i = 2; i < n; i++) {
+        long long tmp = c;
+        c += p;
+        p = tmp;
+    }
+    return c;
+}
+int main() {
+    int n;
+    std::cin >> n;
+    std::cout << f(n) << "\n";
+    return 0;
+}
