@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+#include <deque>
+
+int main() {
+    int N, K;
+    std::cin >> N >> K;
+
+    std::vector<int> measurements(N);
+    for (int i = 0; i < N; i++) {   // init arr
+        std::cin >> measurements[i];
+    }
+
+    std::deque<int> block(K);
+    for (int i = 0; i < K; i++) {   // fill block (indices)
+        while (!block.empty() && measurements[block.back()] >= measurements[i]) {
+            block.pop_back();
+        }
+        block.push_back(i);
+    }
+
+    std::cout << measurements[block.front()] << " ";
+    for (int i = K; i < N; i++) {   // slide block
+        if (!block.empty() && block.front() <= i - K) { // usun el. spoza okna
+            block.pop_front();
+        }
+        while (!block.empty() && measurements[block.back()] >= measurements[i]) {   // usun wieksze el. niz od konca
+            block.pop_back();
+        }
+        block.push_back(i);
+        std::cout << measurements[block.front()] << " "; // curr min
+    }
+    return 0;
+}
