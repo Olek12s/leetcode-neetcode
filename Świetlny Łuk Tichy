@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+#define MIN -9223372036854775808
+#define ll long long
+int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cout.tie(nullptr);
+    std::cin.tie(nullptr);
+
+    int N;
+    long long w_1, w_2;
+    std::cin >> N >> w_1 >> w_2;
+
+    std::vector<ll> A(N);
+
+    for (int i = 0; i < N; i++) {
+        std::cin >> A[i];
+    }
+
+    ll arr[6];
+    for (ll &i : arr) i = MIN;
+    arr[0] = 0;
+
+    for (int i = 0; i < N; i++) {
+        ll x = A[i];
+
+        if (arr[4] != MIN) arr[5] = std::max(arr[5], arr[4] + w_1 * x);
+        if (arr[3] != MIN) arr[4] = std::max(arr[4], arr[3] + w_2 * x);
+        if (arr[2] != MIN) arr[3] = std::max(arr[3], arr[2] + x);
+        if (arr[1] != MIN) arr[2] = std::max(arr[2], arr[1] + w_2 * x);
+        if (arr[0] != MIN) arr[1] = std::max(arr[1], arr[0] + w_1 * x);
+    }
+
+    std::cout << arr[5] << "\n";
+
+    return 0;
+}
